@@ -2,7 +2,7 @@ var express = require('express');
 var execute = require('./execute');
 var io = require('socket.io-client');
 
-var client = io.connect("http://localhost:3000");
+var client = io.connect("localhost:3000");
 
 client.on('connect',function() {
     console.log("connected!");
@@ -17,7 +17,7 @@ client.on('command', function(command){
             client.emit("pi", "I am ok");
             break;
         default:
-            client.emit("pi", "I don't understand");
+            client.emit("pi", "Someone told me: " + command);
             break;
     }
 })
