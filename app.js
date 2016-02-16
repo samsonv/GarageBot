@@ -2,7 +2,7 @@ var express = require('express');
 var io = require('socket.io-client');
 var Gpio = require('onoff').Gpio;
 var five = require("johnny-five");
-var board = new five.Board();
+var board = new five.Board({ repl: false });
 
 var site = process.argv[2] || 'localhost:3000';
 var client = io.connect(site);
@@ -23,7 +23,7 @@ var blink = function(time){
 
 var blinkWithArduino = function(seconds){
     console.log('should blink for ' + seconds + ' milliseconds');
-    var led = new five.Led(13);
+    var led = new five.Led(12);
     led.on();
     setTimeout(function(){
         led.off()
@@ -45,7 +45,8 @@ client.on('command', function(command){
             break;
         case 'blink':
             client.emit('pi', 'Ok, opening trough arduino now');
-            blinkWithArduino(5000);
+            blinkWithArduino(1000);
+            break;
             break;
         default:
             client.emit('pi', 'Someone told me: ' + command);
