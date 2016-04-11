@@ -1,17 +1,17 @@
 {
   "name": "piopener",
   "version": "1.0.0",
-  "description": "A simple node application for opening a garage port",
+  "description": "A cool node application for opening a garage port and meassuring distance",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "postinstall": "node app.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "express": "^4.13.4",
-    "johnny-five": "^0.9.19",
     "onoff": "^1.0.4",
+    "r-pi-usonic": "^2.5.0",
     "socket.io-client": "^1.4.5"
   }
 }
