@@ -5,6 +5,9 @@ var garageInterval;
 var portIsRunning = false;
 var usonic = require('r-pi-usonic');
 
+var site = process.argv[2] || 'localhost:3000';
+var client = io.connect(site);
+
 var blink = function(time) {
     var led = new Gpio(23, 'out');
     led.writeSync(1);
@@ -33,7 +36,7 @@ var handleCommand = function(command) {
             break;
         case 'blink':
             var dur = command[1] || 1000;
-            openOrClose(dur);
+            blink(dur);
             client.emit('pi', 'Ok, opnar i ' + dur + ' millisekund');
             break;
         default:
@@ -47,8 +50,6 @@ usonic.init(function(error) {
         console.log('fail!', error);
     } else {
         var sensor = usonic.createSensor(21, 17, 450);
-        var site = process.argv[2] || 'localhost:3000';
-        var client = io.connect(site);
 
         client.on('connect', function() {
             console.log('connected!');
