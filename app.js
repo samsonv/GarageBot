@@ -7,13 +7,17 @@ var usonic = require('r-pi-usonic');
 
 var site = process.argv[2] || 'localhost:3000';
 var client = io.connect(site);
+var isBusyBlinking = false;
 
 var blink = function(time) {
     var led = new Gpio(23, 'out');
     led.writeSync(1);
+    isBusyBlinking = true;
+
     setTimeout(function() {
         led.writeSync(0);
         led.unexport();
+        isBusyBlinking = false;
     }, time);
 }
 
@@ -36,8 +40,10 @@ var handleCommand = function(command) {
             break;
         case 'blink':
             var dur = command[1] || 1000;
-            blink(dur);
-            client.emit('pi', 'Ok, opnar i ' + dur + ' millisekund');
+            if (!isBusyBlinking) {
+                blink(dur);
+                client.emit('pi', 'Ok, opnar i ' + dur + ' millisekund');
+            }
             break;
         default:
             client.emit('pi', 'Eg fortstod ikkje meldinga di: "' + command + '". Prøv <status> eller <blink>');
