@@ -8,20 +8,26 @@ var usonic = require('r-pi-usonic');
 var site = process.argv[2] || 'localhost:3000';
 var client = io.connect(site);
 var isBusyBlinking = false;
+var turnOff;
+var reportDistance;
 
-var blink = function(time) {
+var blink = function (time) {
     var led = new Gpio(23, 'out');
     led.writeSync(1);
     isBusyBlinking = true;
 
-    setTimeout(function() {
+    if (turnOff) {
+        clearTimeout(turnOff);
+    }
+
+    turnOff = setTimeout(function () {
         led.writeSync(0);
         led.unexport();
         isBusyBlinking = false;
     }, time);
 }
 
-var handleCommand = function(command) {
+var handleCommand = function (command) {
     command = command.toLowerCase().split(' ');
 
     switch (command[0]) {
@@ -51,20 +57,24 @@ var handleCommand = function(command) {
     }
 }
 
-usonic.init(function(error) {
+usonic.init(function (error) {
     if (error) {
         console.log('fail!', error);
     } else {
         var sensor = usonic.createSensor(21, 17, 450);
 
-        client.on('connect', function() {
+        client.on('connect', function () {
             console.log('connected!');
-            client.emit('pi', 'hello!');
+            client.emit('pi', 'Hei.');
 
-            setInterval(function() {
+            if (reportDistance) {
+                clearInterval(reportDistance);
+            }
+            
+            reportDistance = setInterval(function () {
                 var distance = sensor();
                 client.emit('distance-message', distance);
-            }, 1000);
+            }, 5000);
         });
 
         client.on('command', handleCommand)
