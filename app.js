@@ -1,4 +1,8 @@
 var express = require('express');
+
+var app = express();
+var http = require('http').Server(app);
+
 var io = require('socket.io-client');
 var Gpio = require('onoff').Gpio;
 var garageInterval;
@@ -20,7 +24,7 @@ var blink = function (time) {
         clearTimeout(turnOff);
     }
 
-    turnOff = setTimeout(function () {
+    turnOff = setTimeout(function () {''
         led.writeSync(0);
         led.unexport();
         isBusyBlinking = false;
@@ -57,6 +61,15 @@ var handleCommand = function (command) {
     }
 }
 
+app.get('/', function (req, res) {
+    res.send("hello world");
+});
+
+app.get('/open', function (req, res) {
+    handleCommand('blink');
+    res.send('ok, opening..')
+});
+
 usonic.init(function (error) {
     if (error) {
         console.log('fail!', error);
@@ -78,6 +91,10 @@ usonic.init(function (error) {
         });
 
         client.on('command', handleCommand)
+
+        http.listen(port, function () {
+            console.log('listening on *:' + port);
+        });
     }
 });
 
