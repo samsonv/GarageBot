@@ -90,8 +90,8 @@ usonic.init(function (error) {
 
         client.on('command', handleCommand)
 
-        http.listen(port, function () {
-            console.log('listening on *:' + port);
+        http.listen(80, function () {
+            console.log('listening on *:' + 80);
         });
     }
 });
