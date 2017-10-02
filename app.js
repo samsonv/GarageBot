@@ -12,7 +12,9 @@ var client = io.connect(site);
 var isBusyBlinking = false;
 var turnOff;
 var reportDistance;
-var distance = 0;
+
+var self = this;
+self.distance = 0;
 
 var blink = function (time) {
     var led = new Gpio(23, 'out');
@@ -72,7 +74,7 @@ app.get('/open', function (req, res) {
 });
 
 app.get('/distance', function(req, res){
-    res.send(distance);
+    res.send(self.distance);
 })
 
 usonic.init(function (error) {
@@ -90,8 +92,8 @@ usonic.init(function (error) {
             }
 
             reportDistance = setInterval(function () {
-                distance = sensor();
-                client.emit('distance-message', distance);
+                self.distance = sensor();
+                client.emit('distance-message', self.distance);
             }, 5000);
         });
 
