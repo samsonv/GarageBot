@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "description": "A cool node application for opening a garage port and meassuring distance",
   "main": "app.js",
-  "scripts": {
-    "postinstall": "node app.js"
-  },
-  "author": "",
+  "author": "Samson",
   "license": "MIT",
   "dependencies": {
     "express": "^4.13.4",

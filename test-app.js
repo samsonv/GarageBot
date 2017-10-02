@@ -59,10 +59,8 @@ var handleCommand = function (command) {
     }
 }
 
-app.use(express.static('wwwroot'));
-
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + 'wwwroot/index.html');
+    res.send("hello world");
 });
 
 app.get('/open', function (req, res) {
