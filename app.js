@@ -98,11 +98,11 @@ usonic.init(function (error) {
         });
 
         client.on('command', handleCommand)
-
-        http.listen(80, function () {
-            console.log('listening on *:' + 80);
-        });
     }
 });
 
 console.log('trying to connect to ' + site);
+
+http.listen(80, function () {
+    console.log('listening on *:' + 80);
+});
